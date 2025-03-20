@@ -1,37 +1,48 @@
 
 
-<script>
-    import anime from 'animejs';
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import anime from 'animejs';
+	import { on } from 'svelte/events';
 
-    let scrollY = $state(0);
-    let old_scrollY = $state(0);
-    let trigger = $state(false);
+  let pageHeight = 0;
 
-    let video;
-    let seekTime = $state(0.0);
+  onMount(() => {
+    pageHeight = document.body.clientHeight;
+    console.log(pageHeight);
+  });
 
-    let text = 'The Straight';
 
-    $effect(() => {
-        if (scrollY < 100) {
-        anime({
-            targets: text,
-            opacity: [0, 1],
-            duration: 1000,
-            easing: 'easeInOutQuad',
-        });
-    };
-    });
+  let scrollY = $state(0);
+  let old_scrollY = $state(0);
+  let trigger = $state(false);
 
-    function seekToTime() {
-      if (video){
-        video.currentTime = seekTime;
-      }
+  let video: HTMLVideoElement;
+  let text = 'The Straight';
+
+  $effect(() => {
+      if (scrollY < pageHeight / 4) {
+      anime({
+          targets: video,
+          currentTime: 1,
+      });
+    } else if (scrollY < pageHeight / 2 && scrollY > pageHeight / 4) {
+      anime({
+          targets: video,
+          currentTime: 2,
+      });
+    } else if (scrollY > pageHeight / 2 && scrollY < 3 * pageHeight / 4) {
+      anime({
+          targets: video,
+          currentTime: 3,
+      });
+    } else {
+      anime({
+          targets: video,
+          currentTime: 4,
+      });
     }
-
-    function updateSeekTime(event) {
-      seekTime = parseFloat(event.target.value);
-    }
+  });
 </script>
 
 <svelte:window on:scroll={() => {
@@ -46,8 +57,6 @@
 } />
 
 <header class="fixed flex items-center justify-center h-screen mb-12 overflow-hidden">
-  <input type="range" min="0" max="5" bind:value={seekTime} on:input={updateSeekTime} step=0.5/>
-  <button on:click={seekToTime}>Seek to {seekTime} seconds</button>
 
   <video class="min-h-screen h-screen" bind:this={video} src="/test.mp4" type="video/mp4"></video>
     <!-- <source bind:this={video} src="/test.mp4" type="video/mp4" controls> -->
