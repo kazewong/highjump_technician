@@ -1,13 +1,14 @@
 
 
 <script>
-    import { onMount } from 'svelte';
     import anime from 'animejs';
 
     let scrollY = $state(0);
     let old_scrollY = $state(0);
-
     let trigger = $state(false);
+
+    let video;
+    let seekTime = $state(0.0);
 
     let text = 'The Straight';
 
@@ -21,6 +22,16 @@
         });
     };
     });
+
+    function seekToTime() {
+      if (video){
+        video.currentTime = seekTime;
+      }
+    }
+
+    function updateSeekTime(event) {
+      seekTime = parseFloat(event.target.value);
+    }
 </script>
 
 <svelte:window on:scroll={() => {
@@ -35,9 +46,12 @@
 } />
 
 <header class="fixed flex items-center justify-center h-screen mb-12 overflow-hidden">
-  <video class="min-h-screen">
-    <source src="/test.mp4" type="video/mp4">
-  </video>
+  <input type="range" min="0" max="5" bind:value={seekTime} on:input={updateSeekTime} step=0.5/>
+  <button on:click={seekToTime}>Seek to {seekTime} seconds</button>
+
+  <video class="min-h-screen h-screen" bind:this={video} src="/test.mp4" type="video/mp4"></video>
+    <!-- <source bind:this={video} src="/test.mp4" type="video/mp4" controls> -->
+  <!-- </video> -->
   
 </header>
 
