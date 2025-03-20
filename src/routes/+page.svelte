@@ -33,7 +33,15 @@
     old_scrollY = scrollY;
     }
 } />
-<header class="fixed top-0 left-0 right-0 z-50 bg-black shadow-md">
+
+<header class="fixed flex items-center justify-center h-screen mb-12 overflow-hidden">
+  <video class="min-h-screen">
+    <source src="/test.mp4" type="video/mp4">
+  </video>
+  
+</header>
+
+<!-- <header class="fixed top-0 left-0 right-0 z-50 bg-black shadow-md">
     <div class="container mx-auto px-4">
         <div class="py-4">
             <p class="text-center text-lg">Scroll Y: {scrollY}</p>
@@ -42,7 +50,7 @@
 
         </div>
     </div>
-</header>
+</header> -->
 
 
 <div class="hero bg-red-400 min-h-screen">
