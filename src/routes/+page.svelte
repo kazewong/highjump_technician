@@ -4,41 +4,29 @@
   import { onMount } from 'svelte';
   import anime from 'animejs';
 
+  import test_image from '$lib/assets/straight/ezgif-frame-017.jpg';
   let pageHeight = 0;
+
+	const imageModules = import.meta.glob(
+		'$lib/assets/straight//*.{avif,gif,heif,jpeg,jpg,png,tiff,webp,svg}',
+		{
+			eager: true,
+			query: {
+				enhanced: true
+			}
+		}
+  )
+  console.log(imageModules);
+  console.log(imageModules[Object.keys(imageModules)[0]]);
+
+  let scrollY = $state(0);
+  let heading = $state("The Straight");
+
 
   onMount(() => {
     pageHeight = document.body.clientHeight;
   });
 
-
-  let scrollY = $state(0);
-
-  let video: HTMLVideoElement;
-  let text = 'The Straight';
-
-  $effect(() => {
-      if (scrollY < pageHeight / 4) {
-      anime({
-          targets: video,
-          currentTime: 1,
-      });
-    } else if (scrollY < pageHeight / 2 && scrollY > pageHeight / 4) {
-      anime({
-          targets: video,
-          currentTime: 2,
-      });
-    } else if (scrollY > pageHeight / 2 && scrollY < 3 * pageHeight / 4) {
-      anime({
-          targets: video,
-          currentTime: 3,
-      });
-    } else {
-      anime({
-          targets: video,
-          currentTime: 4,
-      });
-    }
-  });
 </script>
 
 <svelte:window on:scroll={() => {
@@ -50,57 +38,18 @@
   <div class="container mx-auto px-4">
     <div class="py-4">
         <p class="text-center text-lg">Scroll Y: {scrollY}</p>
-
-
     </div>
-</div>
-  <video class="min-h-screen h-screen" bind:this={video} src="/test.mp4" type="video/mp4"></video>
-    <!-- <source bind:this={video} src="/test.mp4" type="video/mp4" controls> -->
-  <!-- </video> -->
+  </div>
+</header>
+
+<enhanced:img src={imageModules[Object.keys(imageModules)[25]].default} alt="Preloaded Image" class="fixed top-0 left-0 w-full h-full object-cover z-0" />
+
+<div class="hero bg-red-400 min-h-screen">
   
-</header>
-
-<header class="fixed top-0 left-0 right-0 z-50 bg-black shadow-md">
-
-</header>
-
-
-<div class="hero bg-red-400 min-h-screen">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold" bind:this={text}>The Straight</h1>
-      </div>
+  <div class="hero-content text-center">
+    <div class="max-w-md">
+      <h1 class="text-5xl font-bold">{heading}</h1>
     </div>
+  </div>
 </div>
 
-<div class="hero bg-red-400 min-h-screen">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Transition</h1>
-      </div>
-    </div>
-</div>
-
-<div class="hero bg-red-400 min-h-screen">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">The Curve</h1>
-      </div>
-    </div>
-</div>
-
-<div class="hero bg-red-400 min-h-screen">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Take-off</h1>
-      </div>
-    </div>
-</div>
-
-<div class="hero bg-red-400 min-h-screen">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">The Arch</h1>
-      </div>
-    </div>
-</div>
