@@ -33,13 +33,12 @@
   function animateImages() {
       anime({
         targets: counter,
-        value: 25,
-        duration: 500,
-        easing: 'easeInOutQuad',
+        value: 45,
+        duration: 3000,
+        easing: 'easeOutCirc',
         round: 1,
         update: function() {
-          index = Math.floor(counter.value);
-          console.log(counter.value);
+          index = counter.value;
         },
       });
     }
