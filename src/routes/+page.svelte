@@ -2,9 +2,7 @@
 	import { onMount } from 'svelte';
 	import anime from 'animejs';
 
-	import test_image from '$lib/assets/straight/ezgif-frame-017.jpg';
-	let pageHeight = 0;
-
+  // Loading images
 	const imageModules = import.meta.glob(
 		'$lib/assets/straight//*.{avif,gif,heif,jpeg,jpg,png,tiff,webp,svg}',
 		{
@@ -16,6 +14,7 @@
 	);
 	console.log(imageModules);
 
+  // Create scroll progress and heading state
 	let scrollProgress = $state(0);
 	let heading = $state('The Straight');
 	const scrollSensitivity = 0.01;
@@ -24,9 +23,30 @@
 		scrollProgress += event.deltaY * scrollSensitivity;
 		scrollProgress = Math.max(0, Math.min(100, scrollProgress));
 	}
-	onMount(() => {
-		pageHeight = document.body.clientHeight;
-	});
+
+  // Animate images
+
+  let index: number = $state(0);
+  var counter = {
+    value: 0,
+  };
+  function animateImages() {
+      anime({
+        targets: counter,
+        value: 25,
+        duration: 500,
+        easing: 'easeInOutQuad',
+        round: 1,
+        update: function() {
+          index = Math.floor(counter.value);
+          console.log(counter.value);
+        },
+      });
+    }
+  onMount(() => {
+    animateImages();
+  });
+
 </script>
 
 <svelte:window on:wheel={handleWheel} />
@@ -34,13 +54,13 @@
 <header class="fixed mb-12 h-screen flex-row items-center justify-center overflow-hidden">
 	<div class="container mx-auto px-4">
 		<div class="py-4">
-			<p class="text-center text-lg">Scroll Y: {scrollProgress}</p>
+			<p class="text-center text-lg">Scroll Y: {index}</p>
 		</div>
 	</div>
 </header>
 
 <enhanced:img
-	src={imageModules[Object.keys(imageModules)[25]].default}
+	src={imageModules[Object.keys(imageModules)[index]].default}
 	alt="Preloaded Image"
 	class="fixed top-0 left-0 -z-5 h-full w-full object-cover"
 />
