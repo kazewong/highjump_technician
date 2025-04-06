@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { animate, createTimer, utils } from 'animejs';
+	import { crossfade } from 'svelte/transition';
 
 	// Loading text
 
@@ -27,17 +28,35 @@
 	let section_counter = $state(0);
 	const scrollSensitivity = 0.01;
 
-	function fadeIn(){
-		
+
+	const heading_selector = document.querySelector('#heading');
+
+	function cross_fade() {
+		animate('#heading', {
+			opacity: 0,
+			duration: 1000,
+			easing: 'easeOutCirc',
+			onComplete: function() {
+				section_counter += 1;
+				scroll_progress = 0;
+				animate('#heading', {
+					opacity: 1,
+					duration: 1000,
+					easing: 'easeOutCirc',
+				});
+			},
+		});
+
 	}
+
+	const scroll_range = 5
 
 	function handleWheel(event: WheelEvent) {
 		scroll_progress += event.deltaY * scrollSensitivity;
-		scroll_progress = Math.max(-30, Math.min(30, scroll_progress));
-		if (scroll_progress == 30) {
-			section_counter += 1;
-			scroll_progress = 0;
-		} else if (scroll_progress == -30) {
+		scroll_progress = Math.max(-scroll_range, Math.min(scroll_range, scroll_progress));
+		if (scroll_progress == scroll_range) {
+			cross_fade()
+		} else if (scroll_progress == -scroll_range) {
 			section_counter -= 1;
 			scroll_progress = 0;
 		}
@@ -89,7 +108,7 @@
 <div class="hero bg-opacity-0 min-h-screen">
 	<div class="hero-content text-center">
 		<div class="max-w-md">
-			<h1 class="text-5xl font-bold">{heading}</h1>
+			<h1 class="text-5xl font-bold" id="heading">{heading}</h1>
 		</div>
 	</div>
 </div>
