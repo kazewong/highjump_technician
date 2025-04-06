@@ -2,6 +2,14 @@
 	import { onMount } from 'svelte';
 	import { animate, createTimer, utils } from 'animejs';
 
+	// Loading text
+
+	const headings = [
+		'The Straight',
+		'The Curve',
+		'The Takeoff',
+		'The Arch'];
+
   // Loading images
 	const imageModules = import.meta.glob(
 		'$lib/assets/straight//*.{avif,gif,heif,jpeg,jpg,png,tiff,webp,svg}',
@@ -16,9 +24,12 @@
 
   // Create scroll progress and heading state
 	let scroll_progress = $state(0);
-	let heading = $state('The Straight');
 	let section_counter = $state(0);
 	const scrollSensitivity = 0.01;
+
+	function fadeIn(){
+		
+	}
 
 	function handleWheel(event: WheelEvent) {
 		scroll_progress += event.deltaY * scrollSensitivity;
@@ -36,11 +47,13 @@
 
   // Animate images
 
-  let index: number = $state(0);
-  var counter = {
-    value: 0,
-  };
-  function animateImages() {
+	let heading = $derived(headings[section_counter]);
+
+	let index: number = $state(0);
+	var counter = {
+		value: 0,
+	};
+	function animateImages() {
 		animate(counter, {
 			value: 45,
 			duration: 3000,
@@ -50,10 +63,10 @@
 				index = counter.value;
 			},
 		})
-    }
-  onMount(() => {
-    animateImages();
-  });
+	}
+	onMount(() => {
+	animateImages();
+	});
 
 </script>
 
