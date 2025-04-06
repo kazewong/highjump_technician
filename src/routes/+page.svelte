@@ -15,13 +15,23 @@
 	console.log(imageModules);
 
   // Create scroll progress and heading state
-	let scrollProgress = $state(0);
+	let scroll_progress = $state(0);
 	let heading = $state('The Straight');
+	let section_counter = $state(0);
 	const scrollSensitivity = 0.01;
 
 	function handleWheel(event: WheelEvent) {
-		scrollProgress += event.deltaY * scrollSensitivity;
-		scrollProgress = Math.max(0, Math.min(100, scrollProgress));
+		scroll_progress += event.deltaY * scrollSensitivity;
+		scroll_progress = Math.max(-30, Math.min(30, scroll_progress));
+		if (scroll_progress == 30) {
+			section_counter += 1;
+			scroll_progress = 0;
+		} else if (scroll_progress == -30) {
+			section_counter -= 1;
+			scroll_progress = 0;
+		}
+		section_counter = Math.max(0, Math.min(2, section_counter));
+
 	}
 
   // Animate images
@@ -31,15 +41,6 @@
     value: 0,
   };
   function animateImages() {
-    //   animate(counter, {
-    //     to: 45,
-    //     duration: 3000,
-    //     ease: 'easeOutCirc',
-    //     round: 1,
-    //     update: function() {
-    //       index = counter.value;
-    //     },
-    //   });
 		animate(counter, {
 			value: 45,
 			duration: 3000,
@@ -61,16 +62,16 @@
 <header class="fixed mb-12 h-screen flex-row items-center justify-center overflow-hidden">
 	<div class="container mx-auto px-4">
 		<div class="py-4">
-			<p class="text-center text-lg">Scroll Y: {scrollProgress}</p>
+			<p class="text-center text-lg">Scroll Y: {scroll_progress} | Section: {section_counter}</p>
 		</div>
 	</div>
 </header>
 
-<enhanced:img
+<!-- <enhanced:img
 	src={imageModules[Object.keys(imageModules)[index]].default}
 	alt="Preloaded Image"
 	class="fixed top-0 left-0 -z-5 h-full w-full object-cover"
-/>
+/> -->
 
 <div class="hero bg-opacity-0 min-h-screen">
 	<div class="hero-content text-center">
