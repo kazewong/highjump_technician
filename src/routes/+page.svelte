@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import anime from 'animejs';
+	import { animate, createTimer, utils } from 'animejs';
 
   // Loading images
 	const imageModules = import.meta.glob(
@@ -19,7 +19,7 @@
 	let heading = $state('The Straight');
 	const scrollSensitivity = 0.01;
 
-	function handleWheel(event) {
+	function handleWheel(event: WheelEvent) {
 		scrollProgress += event.deltaY * scrollSensitivity;
 		scrollProgress = Math.max(0, Math.min(100, scrollProgress));
 	}
@@ -31,16 +31,24 @@
     value: 0,
   };
   function animateImages() {
-      anime({
-        targets: counter,
-        value: 45,
-        duration: 3000,
-        easing: 'easeOutCirc',
-        round: 1,
-        update: function() {
-          index = counter.value;
-        },
-      });
+    //   animate(counter, {
+    //     to: 45,
+    //     duration: 3000,
+    //     ease: 'easeOutCirc',
+    //     round: 1,
+    //     update: function() {
+    //       index = counter.value;
+    //     },
+    //   });
+		animate(counter, {
+			value: 45,
+			duration: 3000,
+			easing: 'easeOutCirc',
+			modifier: utils.round(1),
+			onUpdate: function() {
+				index = counter.value;
+			},
+		})
     }
   onMount(() => {
     animateImages();
@@ -53,7 +61,7 @@
 <header class="fixed mb-12 h-screen flex-row items-center justify-center overflow-hidden">
 	<div class="container mx-auto px-4">
 		<div class="py-4">
-			<p class="text-center text-lg">Scroll Y: {index}</p>
+			<p class="text-center text-lg">Scroll Y: {scrollProgress}</p>
 		</div>
 	</div>
 </header>
